@@ -27,10 +27,32 @@ def proximo_estado(atual: str) -> str:
 
 # ---------- FERIADOS (via biblioteca + cálculo de datas móveis) ----------
 
+# Traduções dos feriados para português BR
+TRADUCOES_FERIADOS = {
+    "Universal Fraternization Day": "Confraternização Universal",
+    "New Year's Day": "Ano Novo",
+    "Carnaval": "Carnaval",
+    "Good Friday": "Sexta-feira Santa",
+    "Tiradentes' Day": "Tiradentes",
+    "Worker's Day": "Dia do Trabalho",
+    "Corpus Christi": "Corpus Christi",
+    "Constitutionalist Revolution": "Revolução Constitucionalista",
+    "Independence Day": "Independência do Brasil",
+    "Our Lady of Aparecida": "Nossa Senhora Aparecida",
+    "All Souls' Day": "Finados",
+    "Republic Proclamation Day": "Proclamação da República",
+    "National Day of Zumbi and Black Awareness": "Consciência Negra",
+    "Christmas Day": "Natal",
+    "Christmas": "Natal"
+}
+
+def traduzir_feriado(nome_ingles: str) -> str:
+    """Traduz o nome do feriado do inglês para português BR."""
+    return TRADUCOES_FERIADOS.get(nome_ingles, nome_ingles)
+
 def feriados_ano(ano: int):
-    """Retorna conjunto de datas que são feriados no ano especificado."""
-    feriados_dict = feriados_brasil(ano, state=ESTADO, include_moveis=True)
-    return set(feriados_dict.keys())
+    """Retorna dicionário de feriados do ano especificado."""
+    return feriados_brasil(ano, state=ESTADO, include_moveis=True)
 
 # ---------- PERSISTÊNCIA EM JSON ----------
 
@@ -133,12 +155,15 @@ for week in matriz:
         # cor da faixa inferior
         if is_holiday:
             bg = CORES["feriado"]
+            nome_feriado = traduzir_feriado(feriados.get(d, ""))
+            tooltip = f"title='{nome_feriado}'"
         else:
             bg = CORES[st.session_state.dias_estado[key_dia]]
+            tooltip = ""
 
         cols[i].markdown(
-            f"<div style='margin-top:-5px; height:12px; "
-            f"border:1px solid #CCC; background-color:{bg};'></div>",
+            f"<div {tooltip} style='margin-top:-5px; height:12px; "
+            f"border:1px solid #CCC; background-color:{bg}; cursor:help;'></div>",
             unsafe_allow_html=True
         )
 
