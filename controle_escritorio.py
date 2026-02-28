@@ -48,7 +48,7 @@ def salvar_json(dias_estado: dict):
 # ---------- CALENDÁRIO ----------
 
 def gerar_matriz_mes(ano: int, mes: int):
-    cal = calendar.Calendar(firstweekday=0)  # 0 = segunda
+    cal = calendar.Calendar(firstweekday=6)  # 6 = domingo
     return [list(week) for week in cal.monthdatescalendar(ano, mes)]
 
 # ---------- APP STREAMLIT ----------
@@ -87,8 +87,7 @@ feriados = feriados_ano(ano)
 matriz = gerar_matriz_mes(ano, mes)
 
 st.subheader(f"Calendário {chave_mes}")
-
-weekday_labels = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"]
+weekday_labels = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"]
 cols = st.columns(7)
 for i, lbl in enumerate(weekday_labels):
     cols[i].markdown(f"**{lbl}**")

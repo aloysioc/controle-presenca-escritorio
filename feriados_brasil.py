@@ -58,7 +58,6 @@ def feriados_brasil(ano: int, state: str = 'SP', include_moveis: bool = True) ->
         # Datas móveis derivadas da Páscoa
         datas_moveis = {
             pascoa - dt.timedelta(days=47): "Carnaval",
-            pascoa - dt.timedelta(days=46): "Carnaval",  # Segunda de Carnaval
             pascoa - dt.timedelta(days=2): "Sexta-feira Santa",  # Se não estiver já em holidays
             pascoa + dt.timedelta(days=60): "Corpus Christi",
         }
