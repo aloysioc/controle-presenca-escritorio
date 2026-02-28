@@ -3,10 +3,12 @@ import datetime as dt
 import calendar
 import json
 from pathlib import Path
+from feriados_brasil import feriados_brasil, eh_feriado
 
 # ---------- CONFIGURAÇÃO BÁSICA ----------
 
 ARQUIVO = Path("presencas_calendario.json")
+ESTADO = "SP"  # Estado para feriados (SP, RJ, MG, etc.)
 
 CORES = {
     "none": "#FFFFFF",     # sem marcação
@@ -23,29 +25,12 @@ def proximo_estado(atual: str) -> str:
     else:
         return "none"
 
-# ---------- FERIADOS (MANUAL / 2026) ----------
-
-def feriados_fixos_2026():
-    datas = [
-        "2026-01-01",  # Confraternização Universal
-        "2026-02-17",  # Carnaval (seu caso específico)
-        "2026-04-03",  # Sexta-feira Santa (exemplo, confira a data)
-        "2026-04-21",  # Tiradentes
-        "2026-05-01",  # Dia do Trabalho
-        "2026-06-04",  # Corpus Christi (exemplo, confira a data)
-        "2026-09-07",  # Independência
-        "2026-10-12",  # Nossa Senhora Aparecida
-        "2026-11-02",  # Finados
-        "2026-11-15",  # Proclamação da República
-        "2026-11-20",  # Consciência Negra
-        "2026-12-25",  # Natal
-    ]
-    return {dt.date.fromisoformat(d) for d in datas}
+# ---------- FERIADOS (via biblioteca + cálculo de datas móveis) ----------
 
 def feriados_ano(ano: int):
-    if ano == 2026:
-        return feriados_fixos_2026()
-    return set()
+    """Retorna conjunto de datas que são feriados no ano especificado."""
+    feriados_dict = feriados_brasil(ano, state=ESTADO, include_moveis=True)
+    return set(feriados_dict.keys())
 
 # ---------- PERSISTÊNCIA EM JSON ----------
 
