@@ -3,7 +3,7 @@ import datetime as dt
 import calendar
 import json
 from pathlib import Path
-from feriados_brasil import feriados_brasil, eh_feriado
+from feriados_brasil import feriados_brasil
 
 # ---------- CONFIGURAÇÃO BÁSICA ----------
 
