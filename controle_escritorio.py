@@ -54,7 +54,7 @@ def gerar_matriz_mes(ano: int, mes: int):
 # ---------- APP STREAMLIT ----------
 
 st.set_page_config("Controle Escritório – Calendário", layout="centered")
-st.title("Controle de presença no escritório – visão tipo calendário")
+st.title("Controle de presença 60% – Calendário")
 
 # Carrega dados já salvos em disco
 dados_salvos = carregar_json()
