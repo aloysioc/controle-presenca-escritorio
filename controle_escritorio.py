@@ -53,8 +53,18 @@ def gerar_matriz_mes(ano: int, mes: int):
 
 # ---------- APP STREAMLIT ----------
 
-st.set_page_config("Controle Escritório – Calendário", layout="centered")
-st.title("Controle de presença 60% – Calendário")
+st.set_page_config("Controle Escritório – Calendário", layout="centered", initial_sidebar_state="collapsed")
+
+# CSS para otimizar espaço vertical
+st.markdown("""
+<style>
+    .block-container {padding-top: 1rem; padding-bottom: 1rem;}
+    .stMarkdown {margin-bottom: 0.2rem;}
+    [data-testid="stMetricContainer"] {margin-bottom: 0.5rem;}
+</style>
+""", unsafe_allow_html=True)
+
+st.markdown("<h2 style='margin-bottom: 0.5rem; margin-top: 0rem;'>Controle de presença 60%</h2>", unsafe_allow_html=True)
 
 # Carrega dados já salvos em disco
 dados_salvos = carregar_json()
@@ -86,7 +96,7 @@ feriados = feriados_ano(ano)
 
 matriz = gerar_matriz_mes(ano, mes)
 
-st.subheader(f"Calendário {chave_mes}")
+st.markdown(f"<h3 style='margin-bottom: 0.3rem; margin-top: 0.3rem;'>Calendário {chave_mes}</h3>", unsafe_allow_html=True)
 weekday_labels = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"]
 cols = st.columns(7)
 for i, lbl in enumerate(weekday_labels):
@@ -176,7 +186,7 @@ percentual = (total_presenca / total_base * 100) if total_base > 0 else 0
 meta_minima = int(total_base * 0.6)  # arredonda para baixo
 
 st.markdown("---")
-st.subheader("Resumo do mês")
+st.markdown("<h3 style='margin-bottom: 0.3rem; margin-top: 0.3rem;'>Resumo do mês</h3>", unsafe_allow_html=True)
 c1, c2, c3, c4 = st.columns(4)
 c1.metric("Dias úteis base", total_base)
 c2.metric("Presenças", total_presenca)
