@@ -58,18 +58,13 @@ st.set_page_config("Controle Escritório – Calendário", layout="centered", in
 # CSS para otimizar espaço vertical
 st.markdown("""
 <style>
-    .block-container {padding-top: 0.5rem; padding-bottom: 0.5rem;}
-    .stMarkdown {margin-bottom: 0rem; margin-top: 0rem;}
-    [data-testid="stMetricContainer"] {margin-bottom: 0rem; margin-top: 0rem;}
-    [data-testid="stMetricValue"] {font-size: 1.2rem;}
-    [data-testid="stMetricLabel"] {font-size: 0.75rem;}
-    .stNumberInput, .stSelectbox {margin-bottom: 0.5rem;}
-    .stButton {margin-bottom: 0rem;}
-    div[data-testid="stHorizontalBlock"] > div {margin-bottom: 0rem;}
+    .block-container {padding-top: 1rem; padding-bottom: 1rem;}
+    .stMarkdown {margin-bottom: 0.2rem;}
+    [data-testid="stMetricContainer"] {margin-bottom: 0.5rem;}
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown("<h2 style='margin: 0rem 0rem 0.3rem 0rem; font-size: 1.3rem;'>Controle 60%</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='margin-bottom: 0.5rem; margin-top: 0rem;'>Controle de presença 60%</h2>", unsafe_allow_html=True)
 
 # Carrega dados já salvos em disco
 dados_salvos = carregar_json()
@@ -81,29 +76,36 @@ if "dias_estado" not in st.session_state:
 for data_str, estado in dados_salvos.items():
     st.session_state.dias_estado[data_str] = estado
 
-col1, col2, col3 = st.columns([1, 1, 1])
+col1, col2 = st.columns(2)
 with col1:
-    ano = st.number_input("Ano", min_value=2024, max_value=2030, value=2026, step=1, label_visibility="collapsed")
+    ano = st.number_input("Ano", min_value=2024, max_value=2030,
+                          value=2026, step=1)
 with col2:
-    mes = st.selectbox("Mês", options=list(range(1, 13)), format_func=lambda m: ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"][m-1], index=1, label_visibility="collapsed")
-with col3:
-    st.write("")
+    mes = st.selectbox(
+        "Mês",
+        options=list(range(1, 13)),
+        format_func=lambda m: [
+            "Jan","Fev","Mar","Abr","Mai","Jun",
+            "Jul","Ago","Set","Out","Nov","Dez"
+        ][m-1],
+        index=1  # 0=Jan, 1=Fev...
+    )
 
 chave_mes = f"{ano}-{mes:02d}"
 feriados = feriados_ano(ano)
 
 matriz = gerar_matriz_mes(ano, mes)
 
-st.markdown(f"<div style='margin: 0.2rem 0;'><strong style='font-size: 0.85rem;'>Calendário {chave_mes}</strong></div>", unsafe_allow_html=True)
+st.markdown(f"<h3 style='margin-bottom: 0.3rem; margin-top: 0.3rem;'>Calendário {chave_mes}</h3>", unsafe_allow_html=True)
 weekday_labels = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"]
-cols = st.columns(7, gap="small")
+cols = st.columns(7)
 for i, lbl in enumerate(weekday_labels):
-    cols[i].markdown(f"<div style='font-size: 0.75rem; text-align: center;'><strong>{lbl}</strong></div>", unsafe_allow_html=True)
+    cols[i].markdown(f"**{lbl}**")
 
 # ---------- DESENHO DO CALENDÁRIO COM TOGGLE ----------
 
 for week in matriz:
-    cols = st.columns(7, gap="small")
+    cols = st.columns(7)
     for i, d in enumerate(week):
         if d.month != mes:
             cols[i].markdown(" ")
@@ -143,7 +145,16 @@ for week in matriz:
 # ---------- LEGENDA ----------
 
 st.markdown(
-    "<div style='font-size:0.75rem; margin: 0.2rem 0;'><span style='display:inline-block;width:12px;height:8px;border:1px solid #CCC;background:#00C853;'></span> Pres &nbsp; <span style='display:inline-block;width:12px;height:8px;border:1px solid #CCC;background:#FF5252;'></span> Férias &nbsp; <span style='display:inline-block;width:12px;height:8px;border:1px solid #CCC;background:#2979FF;'></span> Feriado</div>",
+    """
+    <div style="margin-top:10px; margin-bottom:10px;">
+      <span style="display:inline-block;width:18px;height:12px;border:1px solid #CCC;background-color:#00C853;"></span>
+      &nbsp;Presença&nbsp;&nbsp;
+      <span style="display:inline-block;width:18px;height:12px;border:1px solid #CCC;background-color:#FF5252;"></span>
+      &nbsp;Férias&nbsp;&nbsp;
+      <span style="display:inline-block;width:18px;height:12px;border:1px solid #CCC;background-color:#2979FF;"></span>
+      &nbsp;Feriado
+    </div>
+    """,
     unsafe_allow_html=True
 )
 
@@ -174,13 +185,13 @@ total_presenca = len(dias_presenca)
 percentual = (total_presenca / total_base * 100) if total_base > 0 else 0
 meta_minima = int(total_base * 0.6)  # arredonda para baixo
 
-st.markdown("<div style='margin-top:0.3rem;'></div>", unsafe_allow_html=True)
-st.markdown("<h3 style='margin-bottom: 0.2rem; margin-top: 0rem; font-size: 1rem;'>Resumo</h3>", unsafe_allow_html=True)
-c1, c2, c3, c4 = st.columns(4, gap="small")
-c1.metric("Base", total_base)
-c2.metric("Presença", total_presenca)
-c3.metric("%", f"{percentual:.0f}%")
-c4.metric("Meta", meta_minima)
+st.markdown("---")
+st.markdown("<h3 style='margin-bottom: 0.3rem; margin-top: 0.3rem;'>Resumo do mês</h3>", unsafe_allow_html=True)
+c1, c2, c3, c4 = st.columns(4)
+c1.metric("Dias úteis base", total_base)
+c2.metric("Presenças", total_presenca)
+c3.metric("% atingido", f"{percentual:.1f}%")
+c4.metric("Meta mínima (60%)", meta_minima)
 
 if total_presenca >= meta_minima:
     st.success("Meta de 60% ATINGIDA ✅")
