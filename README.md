@@ -162,3 +162,13 @@ Projeto pessoal de uso livre.
 ---
 
 Desenvolvido com ❤️ para controle de presença híbrida no escritório
+# Setup rapido no Windows
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+streamlit run controle_escritorio.py
+```
+
+O arquivo `calendario.bat` tambem pode ser usado para abrir o app e agora procura automaticamente por `.\.venv\Scripts\python.exe`, `py -3` ou `python`.
