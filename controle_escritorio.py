@@ -67,6 +67,19 @@ def salvar_json(dias_estado: dict):
         encoding="utf-8"
     )
 
+def hidratar_estado_inicial():
+    """Carrega o estado do JSON apenas uma vez por sessão."""
+    if "dias_estado" not in st.session_state:
+        st.session_state.dias_estado = {}
+
+    if st.session_state.get("json_hidratado", False):
+        return
+
+    for data_str, estado in carregar_json().items():
+        st.session_state.dias_estado[data_str] = estado
+
+    st.session_state.json_hidratado = True
+
 # ---------- CALENDÁRIO ----------
 
 def gerar_matriz_mes(ano: int, mes: int):
@@ -88,15 +101,8 @@ st.markdown("""
 
 st.markdown("<h2 style='margin-bottom: 0.5rem; margin-top: 0rem;'>Controle de presença 60%</h2>", unsafe_allow_html=True)
 
-# Carrega dados já salvos em disco
-dados_salvos = carregar_json()
-
-if "dias_estado" not in st.session_state:
-    st.session_state.dias_estado = {}
-
-# Hidrata o session_state com o que veio do JSON
-for data_str, estado in dados_salvos.items():
-    st.session_state.dias_estado[data_str] = estado
+# Carrega dados já salvos em disco sem sobrescrever mudanças locais a cada rerun
+hidratar_estado_inicial()
 
 col1, col2 = st.columns(2)
 with col1:
@@ -144,6 +150,7 @@ for week in matriz:
             def _toggle():
                 atual = st.session_state.dias_estado[data_key]
                 st.session_state.dias_estado[data_key] = proximo_estado(atual)
+                salvar_json(st.session_state.dias_estado)
             return _toggle
 
         cols[i].button(
@@ -224,8 +231,3 @@ else:
     faltam = meta_minima - total_presenca
     st.warning(f"Meta NÃO atingida. Faltam aproximadamente {max(faltam,0)} dia(s).")
 
-# ---------- SALVAR ----------
-
-if st.button("Salvar tudo em JSON"):
-    salvar_json(st.session_state.dias_estado)
-    st.success(f"Dados salvos em {ARQUIVO.name}.")
