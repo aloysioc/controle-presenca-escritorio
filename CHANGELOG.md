@@ -2,6 +2,21 @@
 
 Histórico detalhado de mudanças e melhorias implementadas no projeto.
 
+## [2.3.0] - 2026-03-31
+
+### 🐛 Corrigido
+- **Clique nos dias voltou a funcionar** mesmo quando o calendário foi inicializado com dados vindos do `presencas_calendario.json`
+- Estado do calendário não é mais sobrescrito pelo JSON a cada rerun do Streamlit
+
+### ✨ Alterado
+- **Salvamento automático** ao alternar o status de um dia
+- Removido o botão "Salvar tudo em JSON", que ficou desnecessário
+- Adicionado `calendario.bat` para iniciar o app Streamlit com mais facilidade
+
+### 📝 Técnico
+- Criada a função `hidratar_estado_inicial()` para carregar o JSON apenas uma vez por sessão
+- Callback de toggle passou a persistir o estado imediatamente no arquivo JSON
+
 ## [2.2.0] - 2026-03-02
 
 ### ✨ Adicionado
