@@ -172,3 +172,25 @@ streamlit run controle_escritorio.py
 ```
 
 O arquivo `calendario.bat` tambem pode ser usado para abrir o app e agora procura automaticamente por `.\.venv\Scripts\python.exe`, `py -3` ou `python`.
+
+## Registro de ambiente
+
+Em `2026-03-31`, nesta maquina de trabalho, o ambiente local foi recriado para acompanhar o ambiente atualizado da maquina pessoal.
+
+Passos executados:
+
+```powershell
+rmdir /s /q .venv
+python -m venv .venv
+.\.venv\Scripts\python -m pip install -r requirements.txt
+```
+
+Resultado confirmado:
+- `.venv` recriado com sucesso
+- dependencias instaladas a partir de `requirements.txt`
+- `calendario.bat` validado com sucesso nesta maquina
+
+Observacao operacional:
+- durante a automacao assistida, houve bloqueio de permissao no diretorio temporario do Windows ao rodar `ensurepip` e `pip` dentro da sandbox
+- fora da sandbox, a recriacao do ambiente e a instalacao funcionaram normalmente
+- para futuras trocas de maquina, este foi o procedimento que deu certo e deve ser repetido primeiro

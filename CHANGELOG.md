@@ -2,6 +2,16 @@
 
 Histórico detalhado de mudanças e melhorias implementadas no projeto.
 
+## [2.3.1] - 2026-03-31
+
+### 📝 Documentacao
+- Registrado no `README.md` o procedimento usado para sincronizar o ambiente desta maquina com a maquina pessoal
+- Documentado que a recriacao local do `.venv` e a reinstalacao via `requirements.txt` funcionaram corretamente
+- Registrado que o `calendario.bat` foi validado com sucesso nesta maquina
+
+### 🔧 Operacional
+- Anotado o comportamento observado durante a automacao assistida: bloqueio de permissao no diretorio temporario do Windows ao usar `ensurepip` e `pip` dentro da sandbox
+- Definido no historico do projeto que, em futuras mudancas de maquina, o primeiro passo recomendado e recriar o `.venv` e reinstalar as dependencias
 ## [2.3.0] - 2026-03-31
 
 ### 🐛 Corrigido
