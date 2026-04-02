@@ -104,10 +104,19 @@ st.markdown("<h2 style='margin-bottom: 0.5rem; margin-top: 0rem;'>Controle de pr
 # Carrega dados já salvos em disco sem sobrescrever mudanças locais a cada rerun
 hidratar_estado_inicial()
 
+hoje = dt.date.today()
+ano_atual = hoje.year
+mes_atual = hoje.month
+
 col1, col2 = st.columns(2)
 with col1:
-    ano = st.number_input("Ano", min_value=2024, max_value=2030,
-                          value=2026, step=1)
+    ano = st.number_input(
+        "Ano",
+        min_value=ano_atual - 10,
+        max_value=ano_atual + 50,
+        value=ano_atual,
+        step=1
+    )
 with col2:
     mes = st.selectbox(
         "Mês",
@@ -116,7 +125,7 @@ with col2:
             "Jan","Fev","Mar","Abr","Mai","Jun",
             "Jul","Ago","Set","Out","Nov","Dez"
         ][m-1],
-        index=1  # 0=Jan, 1=Fev...
+        index=mes_atual - 1
     )
 
 chave_mes = f"{ano}-{mes:02d}"

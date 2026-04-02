@@ -173,6 +173,58 @@ streamlit run controle_escritorio.py
 
 O arquivo `calendario.bat` tambem pode ser usado para abrir o app e agora procura automaticamente por `.\.venv\Scripts\python.exe`, `py -3` ou `python`.
 
+## Servico do Windows com NSSM
+
+Para executar o calendario sem manter um prompt aberto, use o NSSM para registrar o Streamlit como servico do Windows.
+
+### Arquivos adicionados
+
+- `instalar_servico_nssm.ps1`
+- `remover_servico_nssm.ps1`
+
+### Preparacao
+
+Baixe o `nssm.exe` e deixe-o em uma pasta fixa, por exemplo:
+
+```powershell
+C:\Ferramentas\nssm\win64\nssm.exe
+```
+
+### Instalar o servico
+
+Exemplo:
+
+```powershell
+.\instalar_servico_nssm.ps1 -NssmPath "C:\Ferramentas\nssm\win64\nssm.exe" -UseCurrentUser
+```
+
+O script vai solicitar a senha da conta do Windows de forma interativa, sem deixá-la em texto claro no histórico do terminal.
+
+Depois, inicie o servico:
+
+```powershell
+& "C:\Ferramentas\nssm\win64\nssm.exe" start CalendarioEscritorio
+```
+
+Abra no navegador:
+
+```text
+http://localhost:8501
+```
+
+### Remover o servico
+
+```powershell
+.\remover_servico_nssm.ps1 -NssmPath "C:\Ferramentas\nssm\win64\nssm.exe"
+```
+
+### Observacoes
+
+- O app agora inicia no ano e no mes atuais.
+- O seletor de ano foi ampliado para acompanhar anos futuros.
+- Os logs do servico ficam em `.\logs\streamlit-service-out.log` e `.\logs\streamlit-service-err.log`.
+- Como o projeto esta dentro de `C:\Users\...`, o ideal e executar o servico com sua conta do Windows, nao como `LocalSystem`.
+
 ## Registro de ambiente
 
 Em `2026-03-31`, nesta maquina de trabalho, o ambiente local foi recriado para acompanhar o ambiente atualizado da maquina pessoal.
