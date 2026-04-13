@@ -14,10 +14,10 @@ ATIVOS_INICIAIS = [
     {"tipo": "Ativo",  "nome": "DAX-JUN26",              "lotes_iniciais": 79},
     {"tipo": "Ativo",  "nome": "BRENT CRUDE OIL",        "lotes_iniciais": 89},
     {"tipo": "Ativo",  "nome": "CL SWEET CRUDE OIL",     "lotes_iniciais": 94},
-    {"tipo": "Ação",   "nome": "DHR – DANAHER CORPORATION",          "lotes_iniciais": 18},
-    {"tipo": "Ação",   "nome": "NETFLIX – NETFLIX INC",              "lotes_iniciais": 17},
-    {"tipo": "Ação",   "nome": "ISRG – INTUITIVE SURGICAL INC",      "lotes_iniciais": 20},
-    {"tipo": "Ação",   "nome": "AMD – ADVANCED MICRO DEVICES INC",   "lotes_iniciais": 1},
+    {"tipo": "Ação",   "nome": "DHR - DANAHER CORPORATION",          "lotes_iniciais": 18},
+    {"tipo": "Ação",   "nome": "NETFLIX - NETFLIX INC",              "lotes_iniciais": 17},
+    {"tipo": "Ação",   "nome": "ISRG - INTUITIVE SURGICAL INC",      "lotes_iniciais": 20},
+    {"tipo": "Ação",   "nome": "AMD - ADVANCED MICRO DEVICES INC",   "lotes_iniciais": 1},
 ]
 
 # ---------- PERSISTÊNCIA ----------
@@ -132,8 +132,9 @@ with st.form("form_uso", clear_on_submit=True):
                 f"Restantes: {inicial - usados_ate_agora}."
             )
         else:
+            novo_id = max((r["id"] for r in dados["registros"]), default=0) + 1
             dados["registros"].append({
-                "id":    len(dados["registros"]) + 1,
+                "id":    novo_id,
                 "data":  str(data_uso),
                 "ativo": ativo_sel,
                 "lotes": int(qtd),
